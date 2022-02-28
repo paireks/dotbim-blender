@@ -48,7 +48,7 @@ def export_objects(objs, filepath):
             data_users[obj].append(obj)
         else:
             data_users[obj.data].append(obj)
-    for i, (_, users) in enumerate(data_users.items()):
+    for i, users in enumerate(data_users.values()):
         mesh = convert_blender_mesh_to_dotbim(users[0].evaluated_get(depsgraph).data, i)
         meshes.append(mesh)
 
