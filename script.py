@@ -3,20 +3,14 @@ from dotbimpy import File
 
 
 def convert_dotbim_mesh_to_blender(dotbim_mesh):
-    vertices = []
-    counter = 0
-    while counter < len(dotbim_mesh.coordinates):
-        vertex = (
-        dotbim_mesh.coordinates[counter], dotbim_mesh.coordinates[counter + 1], dotbim_mesh.coordinates[counter + 2])
-        vertices.append(vertex)
-        counter += 3
-
-    faces = []
-    counter = 0
-    while counter < len(dotbim_mesh.indices):
-        face = (dotbim_mesh.indices[counter], dotbim_mesh.indices[counter + 1], dotbim_mesh.indices[counter + 2])
-        faces.append(face)
-        counter += 3
+    vertices = [
+        (dotbim_mesh.coordinates[counter], dotbim_mesh.coordinates[counter + 1], dotbim_mesh.coordinates[counter + 2])
+        for counter in range(0, len(dotbim_mesh.coordinates), 3)
+    ]
+    faces = [
+        (dotbim_mesh.indices[counter], dotbim_mesh.indices[counter + 1], dotbim_mesh.indices[counter + 2])
+        for counter in range(0, len(dotbim_mesh.indices), 3)
+    ]
 
     mesh = bpy.data.meshes.new("dotbim_properties")
     mesh.from_pydata(vertices, [], faces)
