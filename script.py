@@ -20,7 +20,7 @@ def convert_dotbim_mesh_to_blender(dotbim_mesh):
 
 
 scene = bpy.context.scene
-file = File.read(r"House.bim")  # Change your path there
+file = File.read(r'House.bim')  # Change your path there
 
 for i in file.elements:
     dotbim_mesh = next((x for x in file.meshes if x.mesh_id == i.mesh_id), None)
