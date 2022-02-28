@@ -69,4 +69,4 @@ if __name__ == "__main__":
     file_info = {"Author": "John Doe", "Date": "28.09.1999"}
 
     file = dotbimpy.File("1.0.0", meshes=meshes, elements=elements, info=file_info)
-    file.save(r'House.py')
+    file.save(r'House.bim')
