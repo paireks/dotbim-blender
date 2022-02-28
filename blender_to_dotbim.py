@@ -38,7 +38,7 @@ if __name__ == "__main__":
     elements = []
 
     for i, obj in enumerate(bpy.context.selected_objects):
-        if obj.type != "MESH":
+        if obj.type not in ("MESH" , "CURVE", "FONT", "META", "SURFACE"):
             continue
         vertices, faces = convert_blender_mesh_to_dotbim(obj.to_mesh())
         mesh = dotbimpy.Mesh(mesh_id=i, coordinates=vertices, indices=faces)
