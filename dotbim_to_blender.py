@@ -1,5 +1,6 @@
 import bpy
 from dotbimpy import File
+from collections import defaultdict
 
 
 def convert_dotbim_mesh_to_blender(dotbim_mesh):
@@ -22,18 +23,22 @@ def convert_dotbim_mesh_to_blender(dotbim_mesh):
 def import_from_file(filepath):
     scene = bpy.context.scene
     file = File.read(filepath)
+    meshes_users = defaultdict(list)
 
-    for i in file.elements:
-        dotbim_mesh = next((x for x in file.meshes if x.mesh_id == i.mesh_id), None)
+    for elt in file.elements:
+        meshes_users[elt.mesh_id].append(elt)
+    for mesh_id, elts in meshes_users.items():
+        dotbim_mesh = next((m for m in file.meshes if m.mesh_id == mesh_id), None)
         mesh = convert_dotbim_mesh_to_blender(dotbim_mesh)
-        object = bpy.data.objects.new(i.type, mesh)
-        object.location = [i.vector.x, i.vector.y, i.vector.z]
-        object.rotation_mode = "QUATERNION"
-        object.rotation_quaternion = [i.rotation.qw, i.rotation.qx, i.rotation.qy, i.rotation.qz]
-        for item in i.info.items():
-            object[item[0]] = item[1]
-        object.color = [i.color.r / 255.0, i.color.g / 255.0, i.color.b / 255.0, i.color.a / 255.0]
-        scene.collection.objects.link(object)
+        for elt in elts:
+            object = bpy.data.objects.new(elt.type, mesh)
+            object.location = [elt.vector.x, elt.vector.y, elt.vector.z]
+            object.rotation_mode = "QUATERNION"
+            object.rotation_quaternion = [elt.rotation.qw, elt.rotation.qx, elt.rotation.qy, elt.rotation.qz]
+            for item in elt.info.items():
+                object[item[0]] = item[1]
+            object.color = [elt.color.r / 255.0, elt.color.g / 255.0, elt.color.b / 255.0, elt.color.a / 255.0]
+            scene.collection.objects.link(object)
 
 
 if __name__ == "__main__":
