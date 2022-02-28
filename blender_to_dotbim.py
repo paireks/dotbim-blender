@@ -33,12 +33,12 @@ def get_all_ui_props(obj):
         yield (k, v)
 
 
-if __name__ == "__main__":
+def export_objects(objs, filepath):
     meshes = []
     elements = []
 
-    for i, obj in enumerate(bpy.context.selected_objects):
-        if obj.type != "MESH":
+    for i, obj in enumerate(objs):
+        if obj.type not in ("MESH", "CURVE", "FONT", "META", "SURFACE"):
             continue
         vertices, faces = convert_blender_mesh_to_dotbim(obj.to_mesh())
         mesh = dotbimpy.Mesh(mesh_id=i, coordinates=vertices, indices=faces)
@@ -69,4 +69,9 @@ if __name__ == "__main__":
     file_info = {"Author": "John Doe", "Date": "28.09.1999"}
 
     file = dotbimpy.File("1.0.0", meshes=meshes, elements=elements, info=file_info)
-    file.save(r'House.py')
+    file.save(filepath)
+
+
+if __name__ == "__main__":
+    objects = bpy.context.selected_objects
+    export_objects(objs=objects, filepath=r'House.bim')
