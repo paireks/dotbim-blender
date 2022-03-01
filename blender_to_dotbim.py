@@ -1,9 +1,10 @@
-import bpy
-import dotbimpy
-import numpy as np
-import bmesh
 import uuid
+from datetime import date
 from collections import defaultdict
+import numpy as np
+import dotbimpy
+import bpy
+import bmesh
 
 
 def triangulate_mesh(mesh):
@@ -34,7 +35,7 @@ def get_all_ui_props(obj):
         yield (k, v)
 
 
-def export_objects(objs, filepath):
+def export_objects(objs, filepath, author="John Doe"):
     meshes = []
     elements = []
 
@@ -75,8 +76,7 @@ def export_objects(objs, filepath):
 
             elements.append(element)
 
-    file_info = {"Author": "John Doe", "Date": "28.09.1999"}
-
+    file_info = {"Author": author, "Date": date.today().strftime("%d.%m.%Y")}
     file = dotbimpy.File("1.0.0", meshes=meshes, elements=elements, info=file_info)
     file.save(filepath)
 
