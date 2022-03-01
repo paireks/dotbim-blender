@@ -12,6 +12,7 @@ Script was created for Blender 2.91.
 ```cmd
 pip install --target="your\path" dotbimpy
 ```
+Additional note: sometimes it requires to open cmd with admin rights (if there is no permission to access to that directory).
 
 2. Download this repo with Code -> Download ZIP
 3. Install add-on normally as described here: https://docs.blender.org/manual/en/latest/editors/preferences/addons.html
