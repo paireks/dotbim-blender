@@ -36,7 +36,7 @@ def import_from_file(filepath):
             object.rotation_mode = "QUATERNION"
             object.rotation_quaternion = [elt.rotation.qw, elt.rotation.qx, elt.rotation.qy, elt.rotation.qz]
             for item in elt.info.items():
-                object[item[0]] = item[1]
+                object[item[0][0:62]] = item[1]
             object.color = [elt.color.r / 255.0, elt.color.g / 255.0, elt.color.b / 255.0, elt.color.a / 255.0]
             scene.collection.objects.link(object)
 
