@@ -1,8 +1,8 @@
-# dotbim-blender
+# dotbim-blender (Version 1.0.0)
 
 ## Description
 
-It is a bridge between .bim files and Blender. Check out dotbim.net or main repo for dotbim (https://github.com/paireks/dotbim) to read more about .bim files :)
+It is an add-on for Blender to import and export .bim files. Check out dotbim.net or main repo for dotbim (https://github.com/paireks/dotbim) to read more about .bim files :)
 
 Script was created for Blender 2.91.
 
@@ -13,7 +13,23 @@ Script was created for Blender 2.91.
 pip install --target="your\path" dotbimpy
 ```
 
-2. Copy-paste the script into Scripting's editor inside Blender, change path if it's needed, and press run
+2. Download this repo with Code -> Download ZIP
+3. Install add-on normally as described here: https://docs.blender.org/manual/en/latest/editors/preferences/addons.html
+
+## How to import .bim files
+
+![image](https://user-images.githubusercontent.com/47977819/156197378-2735f7af-26c3-41b7-ab60-09925d0d4837.png)
+
+## How to export .bim files
+
+1. Click here:
+
+![image](https://user-images.githubusercontent.com/47977819/156197550-f504a6af-e636-4478-8e8a-82bc0b42c20c.png)
+
+2. Set custom settings here:
+
+![2022-03-01_16h27_20](https://user-images.githubusercontent.com/47977819/156197614-4ad4f95b-550c-4e21-9569-684ea73ad1d8.png)
+
 
 ## How to see colors
 
@@ -29,4 +45,6 @@ Change a settings there:
 
 ![2022-02-27_15h06_43](https://user-images.githubusercontent.com/47977819/155885748-ac813c5e-4427-4807-97f2-b92cc6284da1.png)
 
+## Authors
 
+- Nathan Hild
