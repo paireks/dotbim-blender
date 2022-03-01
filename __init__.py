@@ -63,10 +63,13 @@ class DOTBIM_OT_export(bpy.types.Operator, ExportHelper):
         default="SELECTED",
     )
 
+    author: bpy.props.StringProperty(name="Author", description="Author Name")
+
     def execute(self, context):
         blender_to_dotbim.export_objects(
             objs=context.selected_objects if self.export_filter == "SELECTED" else context.scene.objects,
             filepath=self.filepath,
+            author=self.author,
         )
         return {"FINISHED"}
 
