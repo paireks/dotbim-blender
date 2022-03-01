@@ -5,6 +5,7 @@ import numpy as np
 import dotbimpy
 import bpy
 import bmesh
+import re
 
 
 def triangulate_mesh(mesh):
@@ -68,10 +69,16 @@ def export_objects(objs, filepath, author="John Doe"):
             obj_quat = matrix_world.to_quaternion()
 
             rotation = dotbimpy.Rotation(qx=obj_quat.x, qy=obj_quat.y, qz=obj_quat.z, qw=obj_quat.w)
-            type = "Structure"
+
+            name = obj.name
+            # Strip the trailing ".xxx" numbers from the object name
+            search = re.search("\.[0-9]+$", name)
+            if search:
+                name = name[0 : search.start()]
+
             vector = dotbimpy.Vector(x=obj_trans.x, y=obj_trans.y, z=obj_trans.z)
             element = dotbimpy.Element(
-                mesh_id=i, vector=vector, guid=guid, info=info, rotation=rotation, type=type, color=color
+                mesh_id=i, vector=vector, guid=guid, info=info, rotation=rotation, type=name, color=color
             )
 
             elements.append(element)
