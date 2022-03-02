@@ -8,7 +8,7 @@ Script was created for Blender 2.91.
 
 ## How to run a script
 
-1. First you need to install dotbimpy (https://github.com/paireks/dotbimpy) for Blender's Python. Check where it's packages are located (e.g. for me it was C:\Program Files\Blender Foundation\Blender 2.91\2.91\python\lib). Once you've found it, you need to install dotbimpy there. It can be done e.g. by:
+1. First you need to install dotbimpy (https://github.com/paireks/dotbimpy) for Blender's Python. Check where it's packages (folder "site-packages) is located (e.g. for me it was C:\Program Files\Blender Foundation\Blender 2.91\2.91\python\lib\site-packages). Once you've found it, you need to install dotbimpy there. It can be done e.g. by:
 ```cmd
 pip install --target="your\path" dotbimpy
 ```
