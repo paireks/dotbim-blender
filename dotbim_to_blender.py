@@ -3,7 +3,7 @@ from dotbimpy import File
 from collections import defaultdict
 
 
-def convert_dotbim_mesh_to_blender(dotbim_mesh):
+def convert_dotbim_mesh_to_blender(dotbim_mesh, mesh_id):
     vertices = [
         (dotbim_mesh.coordinates[counter], dotbim_mesh.coordinates[counter + 1], dotbim_mesh.coordinates[counter + 2])
         for counter in range(0, len(dotbim_mesh.coordinates), 3)
@@ -13,7 +13,7 @@ def convert_dotbim_mesh_to_blender(dotbim_mesh):
         for counter in range(0, len(dotbim_mesh.indices), 3)
     ]
 
-    mesh = bpy.data.meshes.new("dotbim_properties")
+    mesh = bpy.data.meshes.new(f"Mesh {mesh_id}")
     mesh.from_pydata(vertices, [], faces)
     mesh.update()
 
@@ -29,7 +29,7 @@ def import_from_file(filepath):
         meshes_users[elt.mesh_id].append(elt)
     for mesh_id, elts in meshes_users.items():
         dotbim_mesh = next((m for m in file.meshes if m.mesh_id == mesh_id), None)
-        mesh = convert_dotbim_mesh_to_blender(dotbim_mesh)
+        mesh = convert_dotbim_mesh_to_blender(dotbim_mesh, mesh_id)
         for elt in elts:
             obj = bpy.data.objects.new(elt.type, mesh)
             obj.location = [elt.vector.x, elt.vector.y, elt.vector.z]
