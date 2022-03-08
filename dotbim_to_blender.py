@@ -31,14 +31,14 @@ def import_from_file(filepath):
         dotbim_mesh = next((m for m in file.meshes if m.mesh_id == mesh_id), None)
         mesh = convert_dotbim_mesh_to_blender(dotbim_mesh)
         for elt in elts:
-            object = bpy.data.objects.new(elt.type, mesh)
-            object.location = [elt.vector.x, elt.vector.y, elt.vector.z]
-            object.rotation_mode = "QUATERNION"
-            object.rotation_quaternion = [elt.rotation.qw, elt.rotation.qx, elt.rotation.qy, elt.rotation.qz]
+            obj = bpy.data.objects.new(elt.type, mesh)
+            obj.location = [elt.vector.x, elt.vector.y, elt.vector.z]
+            obj.rotation_mode = "QUATERNION"
+            obj.rotation_quaternion = [elt.rotation.qw, elt.rotation.qx, elt.rotation.qy, elt.rotation.qz]
             for item in elt.info.items():
-                object[item[0][0:62]] = item[1]
-            object.color = [elt.color.r / 255.0, elt.color.g / 255.0, elt.color.b / 255.0, elt.color.a / 255.0]
-            scene.collection.objects.link(object)
+                obj[item[0][0:62]] = item[1]
+            obj.color = [elt.color.r / 255.0, elt.color.g / 255.0, elt.color.b / 255.0, elt.color.a / 255.0]
+            scene.collection.objects.link(obj)
 
 
 if __name__ == "__main__":
