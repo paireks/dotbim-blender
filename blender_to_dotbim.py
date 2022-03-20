@@ -36,7 +36,7 @@ def get_all_ui_props(obj):
         yield (k, v)
 
 
-def export_objects(objs, filepath, author="John Doe"):
+def export_objects(objs, filepath, author="John Doe", type_from="NAME"):
     meshes = []
     elements = []
 
@@ -70,11 +70,14 @@ def export_objects(objs, filepath, author="John Doe"):
 
             rotation = dotbimpy.Rotation(qx=obj_quat.x, qy=obj_quat.y, qz=obj_quat.z, qw=obj_quat.w)
 
-            name = obj.name
-            # Strip the trailing ".xxx" numbers from the object name
-            search = re.search("\.[0-9]+$", name)
-            if search:
-                name = name[0 : search.start()]
+            if type_from == "COLLECTION":
+                name = obj.users_collection[0].name
+            else:
+                name = obj.name
+                # Strip the trailing ".xxx" numbers from the object name
+                search = re.search("\.[0-9]+$", name)
+                if search:
+                    name = name[0 : search.start()]
 
             vector = dotbimpy.Vector(x=obj_trans.x, y=obj_trans.y, z=obj_trans.z)
             element = dotbimpy.Element(

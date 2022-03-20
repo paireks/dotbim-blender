@@ -64,6 +64,15 @@ class DOTBIM_OT_export(bpy.types.Operator, ExportHelper):
     )
 
     author: bpy.props.StringProperty(name="Author", description="Author Name")
+    type_from: bpy.props.EnumProperty(
+        name="Type",
+        description="The element type will be derived from : ",
+        items=(
+            ("NAME", "Name", "Object Name"),
+            ("COLLECTION", "Collection", "Object Collection"),
+        ),
+        default="NAME",
+    )
 
     def execute(self, context):
         blender_to_dotbim.export_objects(
