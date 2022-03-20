@@ -51,8 +51,10 @@ def export_objects(objs, filepath, author="John Doe", type_from="NAME"):
         else:
             data_users[obj.data].append(obj)
     for i, users in enumerate(data_users.values()):
-        mesh = convert_blender_mesh_to_dotbim(users[0].evaluated_get(depsgraph).data, i)
-        meshes.append(mesh)
+        mesh_blender = users[0].to_mesh()  # Convert object to mesh (eg for curves)
+        mesh_blender = mesh_blender.evaluated_get(depsgraph)  # Apply visual modifiers, transforms, etc.
+        mesh_dotbim = convert_blender_mesh_to_dotbim(mesh_blender, i)
+        meshes.append(mesh_dotbim)
 
         for obj in users:
             r, g, b, a = obj.color
