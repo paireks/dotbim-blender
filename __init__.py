@@ -68,7 +68,7 @@ class DOTBIM_OT_export(bpy.types.Operator, ExportHelper):
         name="Type",
         description="The element type will be derived from : ",
         items=(
-            ("NAME", "Name", "Object Name"),
+            ("NAME", "Object Name", "Object Name"),
             ("COLLECTION", "Collection", "Object Collection"),
         ),
         default="NAME",

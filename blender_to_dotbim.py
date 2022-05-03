@@ -16,9 +16,12 @@ def triangulate_mesh(mesh):
     bm.free()
 
 
-def convert_blender_mesh_to_dotbim(blender_mesh, index):
+def convert_blender_mesh_to_dotbim(blender_mesh, index, transform_matrix):
     vertices = np.empty(shape=len(blender_mesh.vertices) * 3, dtype=float)
     blender_mesh.vertices.foreach_get("co", vertices)
+    scale = transform_matrix.to_scale()
+    for i in range(3):
+        vertices[i::3] *= scale[i]
 
     triangulate_mesh(blender_mesh)
     faces = np.empty(shape=len(blender_mesh.polygons) * 3, dtype=int)
@@ -46,14 +49,15 @@ def export_objects(objs, filepath, author="John Doe", type_from="NAME"):
     for obj in objs:
         if obj.type not in ("MESH", "CURVE", "FONT", "META", "SURFACE"):
             continue
-        if obj.modifiers:
+        if obj.modifiers or obj.scale[0] != 1 or obj.scale[1] != 1 or obj.scale[2] != 1:
             data_users[obj].append(obj)
         else:
             data_users[obj.data].append(obj)
     for i, users in enumerate(data_users.values()):
-        mesh_blender = users[0].to_mesh()  # Convert object to mesh (eg for curves)
-        mesh_blender = mesh_blender.evaluated_get(depsgraph)  # Apply visual modifiers, transforms, etc.
-        mesh_dotbim = convert_blender_mesh_to_dotbim(mesh_blender, i)
+        base_obj = users[0]
+        mesh_blender = base_obj.evaluated_get(depsgraph).to_mesh()  # Apply visual modifiers, transforms, etc.
+        transform_matrix = base_obj.matrix_world
+        mesh_dotbim = convert_blender_mesh_to_dotbim(mesh_blender, i, transform_matrix)
         meshes.append(mesh_dotbim)
 
         for obj in users:
