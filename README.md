@@ -1,4 +1,4 @@
-# dotbim-blender (Version 1.0.0)
+# dotbim-blender (Version 1.1)
 
 ## Description
 
