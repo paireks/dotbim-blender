@@ -62,7 +62,7 @@ def export_objects(objs, filepath, author="John Doe", type_from="NAME"):
 
         for obj in users:
             r, g, b, a = obj.color
-            color = dotbimpy.Color(r=r * 255, g=g * 255, b=b * 255, a=a * 255)
+            color = dotbimpy.Color(r=int(r * 255), g=int(g * 255), b=int(b * 255), a=int(a * 255))
 
             guid = str(uuid.uuid4())
 
