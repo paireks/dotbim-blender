@@ -9,7 +9,7 @@ from . import blender_to_dotbim
 bl_info = {
     "name": "dotbim",
     "author": "paireks, Gorgious56",
-    "version": (1, 1),
+    "version": (1, 2),
     "blender": (2, 90, 0),
     "location": "",
     "description": "Exporter / Importer for lightweight dotbim format",
