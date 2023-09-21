@@ -1,5 +1,4 @@
 from pathlib import Path
-import os.path
 import bpy
 from bpy_extras.io_utils import ImportHelper, ExportHelper
 from . import dotbim_to_blender
@@ -9,8 +8,8 @@ from . import blender_to_dotbim
 bl_info = {
     "name": "dotbim",
     "author": "paireks, Gorgious56",
-    "version": (1, 2),
-    "blender": (2, 90, 0),
+    "version": (1, 3),
+    "blender": (3, 6, 0),
     "location": "",
     "description": "Exporter / Importer for lightweight dotbim format",
     "warning": "",
@@ -32,13 +31,25 @@ class DOTBIM_OT_import(bpy.types.Operator, ImportHelper):
         type=bpy.types.OperatorFileListElement,
         options={"HIDDEN", "SKIP_SAVE"},
     )
+    should_switch_to_object_color: bpy.props.BoolProperty(
+        name="Switch Viewport to Object Color",
+        description="Check this to switch the 3D viewport display to Object Color",
+        default=True,
+    )
+
+    def switch_to_object_color(self, context):
+        for area in context.screen.areas:
+            if area.type == "VIEW_3D":
+                area.spaces.active.shading.color_type = "VERTEX"
 
     def execute(self, context):
         folder = Path(self.filepath)
-        if not os.path.isdir(folder):
+        if not folder.is_dir():
             folder = folder.parent
         for file in self.files:
             dotbim_to_blender.import_from_file(f"{folder / file.name}")
+        if self.should_switch_to_object_color:
+            self.switch_to_object_color(context)
         return {"FINISHED"}
 
 
@@ -60,7 +71,7 @@ class DOTBIM_OT_export(bpy.types.Operator, ExportHelper):
             ("SELECTED", "Selected", "Export all selected objects"),
             ("SCENE", "Scene", "Export all objects in the current scene"),
         ),
-        default="SELECTED",
+        default="SCENE",
     )
 
     author: bpy.props.StringProperty(name="Author", description="Author Name")
