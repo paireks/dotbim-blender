@@ -71,7 +71,7 @@ class DOTBIM_OT_export(bpy.types.Operator, ExportHelper):
             ("SELECTED", "Selected", "Export all selected objects"),
             ("SCENE", "Scene", "Export all objects in the current scene"),
         ),
-        default="SELECTED",
+        default="SCENE",
     )
 
     author: bpy.props.StringProperty(name="Author", description="Author Name")
