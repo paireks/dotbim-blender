@@ -20,6 +20,29 @@ def convert_dotbim_mesh_to_blender(dotbim_mesh, mesh_id):
     return mesh
 
 
+def transfer_face_colors(obj, elt):
+    if bpy.app.version >= (3, 6, 0):
+        old_data = obj.data
+        obj.data = obj.data.copy()  # Blender meshes don't support separate sets of attributes
+        obj.data["dotbim_mesh"] = old_data  # So we can roundtrip the mesh id and it doesn't get GCed
+        face_colors = [c / 255.0 for c in elt.face_colors]
+        new_attr = obj.data.color_attributes.new("face_colors", "FLOAT_COLOR", "CORNER")
+        for i in range(0, len(face_colors) - 1, 4):
+            polygon = obj.data.polygons[i // 4]
+            for corner_idx in polygon.loop_indices:
+                new_attr.data[corner_idx].color = (
+                    face_colors[i],
+                    face_colors[i + 1],
+                    face_colors[i + 2],
+                    face_colors[i + 3],
+                )
+
+        new_attr = obj.data.attributes.new("face_colors", "FLOAT_COLOR", "FACE")
+        new_attr.data.foreach_set("color", face_colors)
+    else:
+        print("Face Colors are not (yet) supported for Version < 3.6.0")
+
+
 def import_from_file(filepath):
     scene = bpy.context.scene
     file = File.read(filepath)
@@ -39,6 +62,9 @@ def import_from_file(filepath):
                 obj[item[0][0:62]] = item[1]
             obj.color = [elt.color.r / 255.0, elt.color.g / 255.0, elt.color.b / 255.0, elt.color.a / 255.0]
             scene.collection.objects.link(obj)
+
+            if hasattr(elt, "face_colors"):
+                transfer_face_colors(obj, elt)
 
 
 if __name__ == "__main__":

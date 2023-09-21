@@ -40,7 +40,7 @@ class DOTBIM_OT_import(bpy.types.Operator, ImportHelper):
     def switch_to_object_color(self, context):
         for area in context.screen.areas:
             if area.type == "VIEW_3D":
-                area.spaces.active.shading.color_type = "OBJECT"
+                area.spaces.active.shading.color_type = "VERTEX"
 
     def execute(self, context):
         folder = Path(self.filepath)
