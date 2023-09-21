@@ -34,9 +34,6 @@ def transfer_face_colors(obj, elt):
                     face_colors[i + 2],
                     face_colors[i + 3],
                 )
-
-        new_attr = obj.data.attributes.new("face_colors", "FLOAT_COLOR", "FACE")
-        new_attr.data.foreach_set("color", face_colors)
     else:
         print("Face Colors are not (yet) supported for Version < 3.6.0")
 
