@@ -22,9 +22,7 @@ def convert_dotbim_mesh_to_blender(dotbim_mesh, mesh_id):
 
 def transfer_face_colors(obj, elt):
     if bpy.app.version >= (3, 6, 0):
-        old_data = obj.data
         obj.data = obj.data.copy()  # Blender meshes don't support separate sets of attributes
-        obj.data["dotbim_mesh"] = old_data  # So we can roundtrip the mesh id and it doesn't get GCed
         face_colors = [c / 255.0 for c in elt.face_colors]
         new_attr = obj.data.color_attributes.new("face_colors", "FLOAT_COLOR", "CORNER")
         for i in range(0, len(face_colors) - 1, 4):

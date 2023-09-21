@@ -16,18 +16,37 @@ def triangulate_mesh(mesh):
     bm.free()
 
 
-def convert_blender_mesh_to_dotbim(blender_mesh, index, transform_matrix):
-    vertices = np.empty(shape=len(blender_mesh.vertices) * 3, dtype=float)
-    blender_mesh.vertices.foreach_get("co", vertices)
-    scale = transform_matrix.to_scale()
-    for i in range(3):
-        vertices[i::3] *= scale[i]
+class BlenderToDotbimConverter:
+    def __init__(self, mesh_blender) -> None:
+        self.mesh_blender = mesh_blender
 
-    triangulate_mesh(blender_mesh)
-    faces = np.empty(shape=len(blender_mesh.polygons) * 3, dtype=int)
-    blender_mesh.polygons.foreach_get("vertices", faces)
+    def convert(self, index, transform_matrix):
+        mesh_blender = self.mesh_blender
+        active_color_attribute = mesh_blender.color_attributes.active_color
+        if (
+            active_color_attribute
+            and active_color_attribute.domain == "CORNER"
+            and active_color_attribute.data_type == "FLOAT_COLOR"
+        ):
+            face_colors = []
+            for polygon in mesh_blender.polygons:
+                face_colors.extend(active_color_attribute.data[polygon.loop_start].color)
+            face_colors = [int(c * 255) for c in face_colors]
+        else:
+            face_colors = None
 
-    return dotbimpy.Mesh(mesh_id=index, coordinates=vertices.tolist(), indices=faces.tolist())
+        vertices = np.empty(shape=len(mesh_blender.vertices) * 3, dtype=float)
+        mesh_blender.vertices.foreach_get("co", vertices)
+        scale = transform_matrix.to_scale()
+        for i in range(3):
+            vertices[i::3] *= scale[i]
+
+        triangulate_mesh(mesh_blender)
+        faces = np.empty(shape=len(mesh_blender.polygons) * 3, dtype=int)
+        mesh_blender.polygons.foreach_get("vertices", faces)
+
+        self.mesh_dotbim = dotbimpy.Mesh(mesh_id=index, coordinates=vertices.tolist(), indices=faces.tolist())
+        self.face_colors = face_colors
 
 
 def get_all_ui_props(obj):
@@ -57,7 +76,11 @@ def export_objects(objs, filepath, author="John Doe", type_from="NAME"):
         base_obj = users[0]
         mesh_blender = base_obj.evaluated_get(depsgraph).to_mesh()  # Apply visual modifiers, transforms, etc.
         transform_matrix = base_obj.matrix_world
-        mesh_dotbim = convert_blender_mesh_to_dotbim(mesh_blender, i, transform_matrix)
+        converter = BlenderToDotbimConverter(mesh_blender)
+        converter.convert(i, transform_matrix)
+        mesh_dotbim = converter.mesh_dotbim
+        face_colors = converter.face_colors
+
         meshes.append(mesh_dotbim)
 
         for obj in users:
@@ -87,7 +110,14 @@ def export_objects(objs, filepath, author="John Doe", type_from="NAME"):
 
             vector = dotbimpy.Vector(x=obj_trans.x, y=obj_trans.y, z=obj_trans.z)
             element = dotbimpy.Element(
-                mesh_id=i, vector=vector, guid=guid, info=info, rotation=rotation, type=name, color=color
+                mesh_id=i,
+                vector=vector,
+                guid=guid,
+                info=info,
+                rotation=rotation,
+                type=name,
+                color=color,
+                face_colors=face_colors,
             )
 
             elements.append(element)
@@ -99,4 +129,4 @@ def export_objects(objs, filepath, author="John Doe", type_from="NAME"):
 
 if __name__ == "__main__":
     objects = bpy.context.selected_objects
-    export_objects(objs=objects, filepath=r'House.bim')
+    export_objects(objs=objects, filepath=r"House.bim")
