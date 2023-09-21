@@ -4,17 +4,17 @@
 
 It is an add-on for Blender to import and export .bim files. Check out dotbim.net or main repo for dotbim (https://github.com/paireks/dotbim) to read more about .bim files :)
 
-Blender version > 3.6 is required.
+Blender version >= 3.6 is required.
 
 ## How to run a script
 
-1. First you need to install dotbimpy (https://github.com/paireks/dotbimpy) for Blender's Python. Check where it's packages (folder "site-packages) is located (e.g. for me it was C:\Program Files\Blender Foundation\Blender 2.91\2.91\python\lib\site-packages). Once you've found it, you need to install dotbimpy there. It can be done e.g. by:
+1. First you need to install dotbimpy (https://github.com/paireks/dotbimpy) for Blender's Python. Check where it's packages (folder "site-packages) is located (e.g. for me it was C:\Program Files\Blender Foundation\Blender 3.6\3.6\python\lib\site-packages). Once you've found it, you need to install dotbimpy there. It can be done e.g. by:
 ```cmd
 pip install --target="your\path" dotbimpy
 ```
-Additional note: sometimes it requires to open cmd with admin rights (if there is no permission to access to that directory).
+**Additional note**: sometimes it requires to open cmd with admin rights (if there is no permission to access to that directory).
 
-2. Download this repo with Code -> Download ZIP
+2. Download this repo from Github by clicking Code button on top -> Download ZIP
 3. Install add-on normally as described here: https://docs.blender.org/manual/en/latest/editors/preferences/addons.html
 
 ## How to import .bim files
