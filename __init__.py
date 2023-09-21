@@ -1,5 +1,4 @@
 from pathlib import Path
-import os.path
 import bpy
 from bpy_extras.io_utils import ImportHelper, ExportHelper
 from . import dotbim_to_blender
@@ -45,7 +44,7 @@ class DOTBIM_OT_import(bpy.types.Operator, ImportHelper):
 
     def execute(self, context):
         folder = Path(self.filepath)
-        if not os.path.isdir(folder):
+        if not folder.is_dir():
             folder = folder.parent
         for file in self.files:
             dotbim_to_blender.import_from_file(f"{folder / file.name}")
