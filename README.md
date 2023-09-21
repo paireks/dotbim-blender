@@ -1,10 +1,10 @@
-# dotbim-blender (Version 1.2)
+# dotbim-blender (Version 1.3)
 
 ## Description
 
 It is an add-on for Blender to import and export .bim files. Check out dotbim.net or main repo for dotbim (https://github.com/paireks/dotbim) to read more about .bim files :)
 
-Script was created for Blender 2.91.
+Blender version > 3.6 is required.
 
 ## How to run a script
 
