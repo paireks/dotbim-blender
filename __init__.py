@@ -32,6 +32,16 @@ class DOTBIM_OT_import(bpy.types.Operator, ImportHelper):
         type=bpy.types.OperatorFileListElement,
         options={"HIDDEN", "SKIP_SAVE"},
     )
+    should_switch_to_object_color: bpy.props.BoolProperty(
+        name="Switch Viewport to Object Color",
+        description="Check this to switch the 3D viewport display to Object Color",
+        default=True,
+    )
+
+    def switch_to_object_color(self, context):
+        for area in context.screen.areas:
+            if area.type == "VIEW_3D":
+                area.spaces.active.shading.color_type = "OBJECT"
 
     def execute(self, context):
         folder = Path(self.filepath)
@@ -39,6 +49,8 @@ class DOTBIM_OT_import(bpy.types.Operator, ImportHelper):
             folder = folder.parent
         for file in self.files:
             dotbim_to_blender.import_from_file(f"{folder / file.name}")
+        if self.should_switch_to_object_color:
+            self.switch_to_object_color(context)
         return {"FINISHED"}
 
 
