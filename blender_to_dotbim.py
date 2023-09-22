@@ -123,7 +123,7 @@ def export_objects(objs, filepath, author="John Doe", type_from="NAME"):
             elements.append(element)
 
     file_info = {"Author": author, "Date": date.today().strftime("%d.%m.%Y")}
-    file = dotbimpy.File("1.0.0", meshes=meshes, elements=elements, info=file_info)
+    file = dotbimpy.File("1.1.0", meshes=meshes, elements=elements, info=file_info)
     file.save(filepath)
 
 
